@@ -630,7 +630,7 @@ In order to guarantee interoperability, one of the most important points is to c
 An error representation must not be different from the representation of any resource. A main error message is defined, with JSON structure with the following fields:
 - A field "`status`", which can be identified in the response as a standard code from a list of Hypertext Transfer Protocol (HTTP) response status codes.
 - A unique error "`code`", which can be identified and traced for more details. It must be human readable; therefore, it must not be a numeric code. In turn, to achieve a better location of the error, you can reference the value or field that is causing it, and include it in the message. 
-- A detailed description of "`message`"
+- A detailed description in "`message`" - in English API specification, it can be changed in implementation if needed. 
   
 A JSON error structure is proposed below: 
 
@@ -655,38 +655,43 @@ In the following, we elaborate on the existing client errors. In particular, we 
 
 <font size="3"><span style="color: blue"> Syntax Exceptions </span></font>
 
-| **Error code** | Description |
-|-----|-----|
-|`INVALID_ARGUMENT` |  A specified resource duplicate entry found. |
-|`CONFLICT` |  A specified resource duplicate entry found. |
-|`OUT_OF_RANGE`| Client specified an invalid range. |
-|`PERMISSION_DENIED`|  Client does not have sufficient permissions to perform this action. |
-|`ABORTED` |  Concurrency conflict.|
-|`ALREADY_EXISTS` | The resource that a client tried to create already exists. |
+| Status |Code | Message example |
+|:---:|---|---|
+| 400 | `INVALID_ARGUMENT` |  Client specified an invalid argument, request body or query param |
+| 400 |`OUT_OF_RANGE`| Client specified an invalid range |
+| 403|`PERMISSION_DENIED`|  Client does not have sufficient permissions to perform this action |
+| 409 |`CONFLICT` |Request could not be processed due to a conflict |
+| 409 |`ABORTED` |  Concurrency conflict|
+| 409 |`ALREADY_EXISTS` | The resource that a client tried to create already exists |
 
 <font size="3"><span style="color: blue"> Service Exceptions </span></font>
 
-| **Error code** | Description |
-|-----|-----|
-|`UNAUTHENTICATED` |  Request not authenticated due to missing, invalid, or expired credentials.|
-|`NOT_FOUND`|  The specified resource is not found. |
-|`TOO_MANY_REQUESTS`| Either out of resource quota or reaching rate limiting. |
-|`AUTHENTICATION_REQUIRED`|  New authentication is required. |
+| Status |Code | Message example |
+|:---:|---|---|
+| 401(*)|`UNAUTHENTICATED` |  Request not authenticated due to missing, invalid, or expired credentials|
+| 401(*) |`AUTHENTICATION_REQUIRED`|  New authentication is required |
+| 404 |`NOT_FOUND`|  The specified resource is not found |
+| 404 |`OUT_OF_RANGE`|  The specified parameter is out of range |
+| 422 |`NOT SUPPORTED`| Service not supported for this device |
+| 429 |`TOO_MANY_REQUESTS`| Either out of resource quota or reaching rate limit |
+
+(*) *NOTE: When standardized authentication flows are used - cf. [10.2 Security Implementation](#102-security-implementation) the format and content of Error Response should follow relevant standards.*
 
 <font size="3"><span style="color: blue"> Server Exceptions </span></font>
 
-| **Error code** | Description |
-|-----|-----|
-|`FAILED_PRECONDITION` |  Request cannot be executed in the current system state.|
-|`DATA_LOSS`| Unrecoverable data loss or data corruption. |
-|`INTERNAL`| Unknown server error. Typically a server bug.|
-|`BAD_GATEWAY`| An upstream internal service cannot be reached. |
-|`UNAVAILABLE`| Request timeout exceeded. |
-|`TIMEOUT`| Request timeout exceeded. |
-|`NOT_IMPLEMENTED`| This functionality is not implemented yet |
-|`METHOD_NOT_ALLOWED`|	The requested method is not allowed/supported on the target resource. |
-|`NOT_ACCEPTABLE` | The server cannot produce a response matching the content requested by the client through `Accept-*` headers. |
-|`UNSUPPORTED_MEDIA_TYPE`	| The server refuses to accept the request because the payload format is in an unsupported format. |
+| Status |Code | Message example |
+|:---:|---|---|
+| 405 |`METHOD_NOT_ALLOWED`| The requested method is not allowed/supported on the target resource |
+| 406 |`NOT_ACCEPTABLE` | The server cannot produce a response matching the content requested by the client through `Accept-*` headers |
+| 410 |`GONE`|  Access to the target resource is no longer available |
+| 412 |`FAILED_PRECONDITION` | Request cannot be executed in the current system state|
+| 415 |`UNSUPPORTED_MEDIA_TYPE`	| The server refuses to accept the request because the payload format is in an unsupported format |
+| 500 |`INTERNAL`| Unknown server error - Typically a server bug |
+| 501 |`NOT_IMPLEMENTED`| This functionality is not implemented yet |
+| 502 |`BAD_GATEWAY`| An upstream internal service cannot be reached |
+| 503 |`UNAVAILABLE`| Service unavailable |
+| 504 |`TIMEOUT`| Request timeout exceeded |
+
 
 > _NOTE: When no login has been performed or no authentication has been assigned, a non-descriptive generic error will always be returned in all cases, a `UNAUTHENTICATED` 401 “Request not authenticated due to missing, invalid, or expired credentials.” is returned, whatever the reason._
 
