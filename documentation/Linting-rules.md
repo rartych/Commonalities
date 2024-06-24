@@ -407,3 +407,19 @@ _Spectral rule_: [camara-schema-casing-convention]()
 |camara-schema-casing-convention | Schema should follow a specific case convention pascal case (upper camel case) | Yes | Yes | Warning |
 |camara-enum-casing-convention | enum fields contain values that follow a specific case convention: macro (CAPITAL_LETTERS) | tbd | tbd | Info |
 |camara-property-casing-convention | Property names should follow a specific case convention, with the default being camel case | tbd | tbd | Error |
+
+
+## 5. Rules for new requirements in Commonalities version 0.4.0
+
+### x-correlator header
+
+#### 
+
+### Alignment to CAMARA_common.yaml
+
+
+
+
+
+|Name| Desc| Recom mended|CAMARA use|  CAMARA severity |
+|---|---|---|---|--|
