@@ -60,6 +60,9 @@ The content of the release includes:
 * CAMARA_common.yaml - bugs and typos fix by @fernandopradocabrillo in https://github.com/camaraproject/Commonalities/pull/174
 * API Design Guidelines updated on HTTPs usage by @AxelNennker in https://github.com/camaraproject/Commonalities/pull/205
 * Artifacts aligned with API Design Guidelines for Notification Subscription by @PedroDiez in https://github.com/camaraproject/Commonalities/pull/219
+* API Design Guidelines - fixed typos and internal references, tables formatted, sentences restructured by @maxl2287 in https://github.com/camaraproject/Commonalities/pull/229
+* Files in documentation folder = tables formatted, sentences restructured (grammar and style) by @maxl2287 in https://github.com/camaraproject/Commonalities/pull/234
+
 
 ### Removed
 * Removed UUID pattern for x-correlator by @jlurien in https://github.com/camaraproject/Commonalities/pull/168
