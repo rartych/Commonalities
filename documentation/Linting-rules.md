@@ -413,6 +413,64 @@ _Spectral rule_: [camara-schema-casing-convention]()
 
 ### x-correlator header
 
+
+API Design Guidelines: [9. Architecture Headers](https://github.com/camaraproject/Commonalities/blob/638a2a7a73899576c231e463769fc8bdb01e6d20/documentation/API-design-guidelines.md#9-architecture-headers)
+"x-correlator" header should be present in each request and response definition.
+The definitions should follow the [CAMARA_common.yaml](https://github.com/camaraproject/Commonalities/blob/main/artifacts/CAMARA_common.yaml) template
+```
+  headers:
+    x-correlator:
+      description: Correlation id for the different services
+      schema:
+        type: string
+  parameters:
+    x-correlator:
+      name: x-correlator
+      in: header
+      description: Correlation id for the different services
+      schema:
+        type: string
+```
+
+`format: uuid` should not be used.
+
+_Spectral rule_: [camara-x-correlator-header]()
+
+*Severity*: `error`
+
+### Security definition
+
+#### securitySchemes componenet
+CAMARA APIs access and user consent management: [CAMARA API Specification - Authorization and authentication common guidelines](https://github.com/camaraproject/IdentityAndConsentManagement/blob/main/documentation/CAMARA-API-access-and-user-consent.md#camara-api-specification---authorization-and-authentication-common-guidelines)
+
+API specification must ONLY define the following `openIdConnect` entry in securitySchemes, as shown below:
+
+```
+components:
+  securitySchemes:
+    openId:
+      type: openIdConnect
+      openIdConnectUrl: https://example.com/.well-known/openid-configuration
+```
+_Spectral rule_: [camara-securityschemes]()
+
+*Severity*: `error`
+
+
+#### Security scopes
+API Design Guidelines: [11.6.1 Scope naming](https://github.com/camaraproject/Commonalities/blob/638a2a7a73899576c231e463769fc8bdb01e6d20/documentation/API-design-guidelines.md#1161-scope-naming)
+
+
+Define a scope per API operation with the structure:
+
+`api-name:[resource:]action`
+or
+`api-name:[resource:]action[:detail]`
+
+_Spectral rule_: [camara-security-scopes]()
+
+*Severity*: `error`
+
 #### 
 
 ### Alignment to CAMARA_common.yaml
@@ -423,3 +481,7 @@ _Spectral rule_: [camara-schema-casing-convention]()
 
 |Name| Desc| Recom mended|CAMARA use|  CAMARA severity |
 |---|---|---|---|--|
+|camara-x-correlator-header| "x-correlator" header should be present in each request and response definition| Yes | Yes | Error |
+|camara-securityschemes|`openIdConnect` entry in securitySchemes | Yes | Yes | Error |
+|camara-security-scopes| a scope per API operation with the predefined structure | Yes | Yes | Error |
+
