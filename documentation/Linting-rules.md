@@ -31,7 +31,7 @@ Rules applying to both OpenAPI v2.0, v3.0, and most likely v3.1 - details are de
 |---|---|---|--|---|--|
 |contact-properties| contact object is full of the most useful properties: `name`, `url`, and `email`| No | No | Warning | Warning |
 |duplicated-entry-in-enum| Each value of an `enum` must be different from one another | Yes | Yes | Warning | Warning |
-|info-contact |Info object should contain `contact` object |Yes | Yes | Warning | Warning |
+|info-contact |Info object should contain `contact` object |Yes | **No** | Warning | Warning |
 |info-description |Info object should contain `description` object | Yes | Yes| Warning | Warning | 
 |info-license |Info object should contain `license` object |Yes | Yes |  Warning | Warning |
 |license-url | link to the full text of licence | Yes | Yes| Warning | Warning |
@@ -130,33 +130,6 @@ The API functionalities must be implemented following the specifications of the 
 _Spectral rule_: [camara-oas-version]()
 
 *Severity*: `error`
-
-### Info object
-
-API Design Guidelines: 
-[11.1 General Information](hhttps://github.com/camaraproject/Commonalities/blob/main/documentation/API-design-guidelines.md#111-general-information)
-
-
-Info object must include the following information: API title with public name.
-
-
-_Spectral rule_: [camara-info−title]()
-
-*Severity*: `warn`
-
-
-API Design Guidelines: 
-[11.1 General Information](hhttps://github.com/camaraproject/Commonalities/blob/main/documentation/API-design-guidelines.md#111-general-information)
-
-
-Info object must include the following information: API Version in the format: X.Y.Z.
-
-
-_Spectral rule_: [camara-info−version-format]()
-
-*Severity*: `warn` <br>
-❕ Note: Currently the format like  `version: 0.10.0-wip` is used in the API development branch
-
 
 
 ### Path parameters
@@ -413,7 +386,6 @@ _Spectral rule_: [camara-schema-casing-convention]()
 
 ### x-correlator header
 
-
 API Design Guidelines: [9. Architecture Headers](https://github.com/camaraproject/Commonalities/blob/638a2a7a73899576c231e463769fc8bdb01e6d20/documentation/API-design-guidelines.md#9-architecture-headers)
 "x-correlator" header should be present in each request and response definition.
 The definitions should follow the [CAMARA_common.yaml](https://github.com/camaraproject/Commonalities/blob/main/artifacts/CAMARA_common.yaml) template
@@ -471,7 +443,92 @@ _Spectral rule_: [camara-security-scopes]()
 
 *Severity*: `error`
 
+
+#### Security scopes for subscriptions
+API Design Guidelines: [11.6.1 Scope naming](https://github.com/camaraproject/Commonalities/blob/main/documentation/API-design-guidelines.md#apis-which-deal-with-explicit-subscriptions)
+
+
+Define a scope per API operation with the structure:
+
+- explicit event subscriptions with action read and delete
+- scopes for explicit subscriptions with action creation, includes the event type in its formulation to ensure that consent is managed at the level of subscribed event types
+
+_Spectral rule_: [camara-security-scopes-subscriptions]()
+
+*Severity*: `error`
 #### 
+
+
+### Info object (updated requirements)
+
+API Design Guidelines: 
+[11.1 General Information](https://github.com/camaraproject/Commonalities/blob/main/documentation/API-design-guidelines.md#info-object)
+
+
+Info object must include the following information: API title with public name (without API abbreviation)
+
+
+_Spectral rule_: [camara-info−title]()
+
+*Severity*: `warn`
+
+
+API Design Guidelines: 
+[11.1 General Information](https://github.com/camaraproject/Commonalities/blob/main/documentation/API-design-guidelines.md#info-object)
+
+
+Info object must include the following information: API Version in the format: x.y.z
+
+According to [5.3 API versions throughout the release process](https://github.com/camaraproject/Commonalities/blob/main/documentation/API-design-guidelines.md#53-api-versions-throughout-the-release-process)
+API version field can have the following structure:
+
+| API version type  |  API version  |
+|-------------------|:-------------:|
+| work-in-progress  |      wip      |
+| alpha             | x.y.z-alpha.m |
+| release-candidate |   x.y.z-rc.n  |
+| public            |     x.y.z     |   
+
+
+_Spectral rule_: [camara-info−version-format]()
+
+*Severity*: `warn`
+
+API Design Guidelines: 
+[11.1 General Information](https://github.com/camaraproject/Commonalities/blob/main/documentation/API-design-guidelines.md#info-object)
+
+
+Info object must include the following information: license field as follows:
+
+```
+ license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
+```
+
+_Spectral rule_: [camara-info−license]()
+
+*Severity*: `warn`
+
+API Design Guidelines: 
+[11.1 General Information](https://github.com/camaraproject/Commonalities/blob/main/documentation/API-design-guidelines.md#info-object)
+
+
+Info object must include the following information: CAMARA Commonalities version - in the format x.y.z
+The extension field x-camara-commonalities indicates a version of CAMARA Commonalities guidelines that given API specification adheres to, for example:
+
+```
+  x-camara-commonalities: 0.4.0
+```
+_Spectral rule_: [camara-info−commonalities]()
+
+*Severity*: `warn`
+
+### Servers object
+
+API Design Guidelines:
+[11.1 General Information](https://github.com/camaraproject/Commonalities/blob/main/documentation/API-design-guidelines.md#servers-object)
+
 
 ### Alignment to CAMARA_common.yaml
 
