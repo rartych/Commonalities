@@ -26,8 +26,8 @@ jobs:
       uses: tj-actions/changed-files@v40
       with:
         files: |
-      - 'documentation/CAMARA-API-Event-Subscription-and-Notification-Guide.md'
-      - 'documentation/CAMARA-API-Design-Guide.md'
+          documentation/CAMARA-API-Event-Subscription-and-Notification-Guide.md
+          documentation/CAMARA-API-Design-Guide.md
 
     - name: Setup Python
       if: steps.changed-files.outputs.any_changed == 'true'
