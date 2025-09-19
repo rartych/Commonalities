@@ -20,26 +20,7 @@ jobs:
       run: |
         echo "files=documentation/CAMARA-API-Event-Subscription-and-Notification-Guide.md documentation/CAMARA-API-Design-Guide.md" >> $GITHUB_OUTPUT
         
-    - name: Check RFC 2119 keyword capitalization
-      run: |
-        #!/bin/bash
-        
-        # RFC 2119 keywords that MUST be capitalized
-        keywords=("MUST" "MUST NOT" "REQUIRED" "SHALL" "SHALL NOT" "SHOULD" "SHOULD NOT" "RECOMMENDED" "NOT RECOMMENDED" "MAY" "OPTIONAL")
-        
-        # Create regex pattern for lowercase versions
-        lowercase_pattern=""
-        for keyword in "${keywords[@]}"; do
-          lowercase_keyword=$(echo "$keyword" | tr '[:upper:]' '[:lower:]')
-          if [ -z "$lowercase_pattern" ]; then
-            lowercase_pattern="\\b$lowercase_keyword\\b"
-          else
-            lowercase_pattern="$lowercase_pattern|\\b$lowercase_keyword\\b"
-          fi
-        done
-        
-        errors_found=false
-        
+       
     - name: Check RFC 2119 keyword capitalization
       run: |
         #!/bin/bash
