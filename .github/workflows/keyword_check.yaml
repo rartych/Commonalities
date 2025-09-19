@@ -1,0 +1,235 @@
+name: RFC 2119 Keywords Check
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+  workflow_dispatch:
+
+jobs:
+  check-rfc2119-keywords:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Set target files
+      id: find-files
+      run: |
+        echo "files=documentation/CAMARA-API-Event-Subscription-and-Notification-Guide.md documentation/CAMARA-API-Design-Guide.md" >> $GITHUB_OUTPUT
+        
+    - name: Check RFC 2119 keyword capitalization
+      run: |
+        #!/bin/bash
+        
+        # RFC 2119 keywords that MUST be capitalized
+        keywords=("MUST" "MUST NOT" "REQUIRED" "SHALL" "SHALL NOT" "SHOULD" "SHOULD NOT" "RECOMMENDED" "NOT RECOMMENDED" "MAY" "OPTIONAL")
+        
+        # Create regex pattern for lowercase versions
+        lowercase_pattern=""
+        for keyword in "${keywords[@]}"; do
+          lowercase_keyword=$(echo "$keyword" | tr '[:upper:]' '[:lower:]')
+          if [ -z "$lowercase_pattern" ]; then
+            lowercase_pattern="\\b$lowercase_keyword\\b"
+          else
+            lowercase_pattern="$lowercase_pattern|\\b$lowercase_keyword\\b"
+          fi
+        done
+        
+        errors_found=false
+        
+    - name: Check RFC 2119 keyword capitalization
+      run: |
+        #!/bin/bash
+        
+        # RFC 2119 keywords that MUST be capitalized
+        keywords=("MUST" "MUST NOT" "REQUIRED" "SHALL" "SHALL NOT" "SHOULD" "SHOULD NOT" "RECOMMENDED" "NOT RECOMMENDED" "MAY" "OPTIONAL")
+        
+        # Create regex pattern for lowercase versions
+        lowercase_pattern=""
+        for keyword in "${keywords[@]}"; do
+          lowercase_keyword=$(echo "$keyword" | tr '[:upper:]' '[:lower:]')
+          if [ -z "$lowercase_pattern" ]; then
+            lowercase_pattern="\\b$lowercase_keyword\\b"
+          else
+            lowercase_pattern="$lowercase_pattern|\\b$lowercase_keyword\\b"
+          fi
+        done
+        
+        errors_found=false
+        
+        # Function to check if a line number is within a code block
+        is_in_code_block() {
+          local file="$1"
+          local line_num="$2"
+          local temp_file=$(mktemp)
+          
+          # Extract lines up to the target line
+          head -n "$line_num" "$file" > "$temp_file"
+          
+          # Count fenced code blocks (```) - each pair opens/closes a block
+          local fenced_count=$(grep -c '^```' "$temp_file" || echo 0)
+          
+          # Count indented code blocks (4+ spaces at start of line)
+          local current_line=$(sed -n "${line_num}p" "$file")
+          local is_indented_code=false
+          if [[ "$current_line" =~ ^[[:space:]]{4,} ]]; then
+            is_indented_code=true
+          fi
+          
+          rm "$temp_file"
+          
+          # If odd number of fenced blocks, we're inside a fenced code block
+          if [ $((fenced_count % 2)) -eq 1 ]; then
+            return 0  # true - in code block
+          fi
+          
+          # Check if it's an indented code block
+          if [ "$is_indented_code" = true ]; then
+            return 0  # true - in code block
+          fi
+          
+          return 1  # false - not in code block
+        }
+        
+        # Function to check if text is within inline code
+        is_inline_code() {
+          local line="$1"
+          local keyword="$2"
+          
+          # Create a temporary version of the line with inline code removed
+          local cleaned_line="$line"
+          
+          # Remove inline code spans (backticks)
+          # This is a simplified approach - handles most common cases
+          cleaned_line=$(echo "$cleaned_line" | sed 's/`[^`]*`//g')
+          
+          # Check if the keyword still exists after removing inline code
+          if echo "$cleaned_line" | grep -qE "\\b$keyword\\b"; then
+            return 1  # false - not in inline code
+          else
+            return 0  # true - was in inline code
+          fi
+        }
+        
+        # Check each target markdown file
+        for file in ${{ steps.find-files.outputs.files }}; do
+          if [ -f "$file" ]; then
+            echo "Checking $file..."
+            
+            # Get all lines with violations first
+            violations=$(grep -nE "($lowercase_pattern)" "$file" || true)
+            
+            if [ -n "$violations" ]; then
+              file_has_violations=false
+              
+              echo "$violations" | while read -r violation_line; do
+                line_num=$(echo "$violation_line" | cut -d: -f1)
+                content=$(echo "$violation_line" | cut -d: -f2-)
+                
+                # Check if this line is in a code block
+                #if is_in_code_block "$file" "$line_num"; then
+                #  echo "  Line $line_num: SKIPPED (in code block) - $content"
+                #  continue
+                #fi
+                
+                # Check each keyword to see if it's in inline code
+                violation_found=false
+                for keyword in "${keywords[@]}"; do
+                  lowercase_keyword=$(echo "$keyword" | tr '[:upper:]' '[:lower:]')
+                  if echo "$content" | grep -qE "\\b$lowercase_keyword\\b"; then
+                    if ! is_inline_code "$content" "$lowercase_keyword"; then
+                      violation_found=true
+                      break
+                    fi
+                  fi
+                done
+                
+                if [ "$violation_found" = true ]; then
+                  echo "  Line $line_num: $content"
+                  file_has_violations=true
+                fi
+              done
+              
+              if [ "$file_has_violations" = true ]; then
+                echo "❌ RFC 2119 keyword violations found in $file (excluding code blocks)"
+                errors_found=true
+              else
+                echo "✅ No violations found in $file (all lowercase keywords were in code blocks)"
+              fi
+            else
+              echo "✅ No violations found in $file"
+            fi
+            echo ""
+          else
+            echo "⚠️  Warning: $file not found in repository"
+          fi
+        done
+        
+        # Also check for correct capitalization and report summary
+        echo ""
+        echo "=== SUMMARY ==="
+        
+        total_files=0
+        files_with_keywords=0
+        
+        for file in ${{ steps.find-files.outputs.files }}; do
+          if [ -f "$file" ]; then
+            total_files=$((total_files + 1))
+            
+            # Check for properly capitalized keywords
+            proper_keywords=$(grep -nE "\\b(MUST|MUST NOT|REQUIRED|SHALL|SHALL NOT|SHOULD|SHOULD NOT|RECOMMENDED|NOT RECOMMENDED|MAY|OPTIONAL)\\b" "$file" || true)
+            
+            if [ -n "$proper_keywords" ]; then
+              files_with_keywords=$((files_with_keywords + 1))
+              keyword_count=$(echo "$proper_keywords" | wc -l)
+              echo "📋 $file: $keyword_count RFC 2119 keywords found"
+            fi
+          fi
+        done
+        
+        echo ""
+        echo "📊 Checked CAMARA API guide files"
+        echo "📊 $files_with_keywords files contain RFC 2119 keywords"
+        
+        if [ "$errors_found" = true ]; then
+          echo ""
+          echo "❌ FAILED: RFC 2119 keywords must be capitalized according to RFC 2119 specification"
+          echo "💡 Please capitalize the following keywords when used in normative contexts:"
+          echo "   MUST, MUST NOT, REQUIRED, SHALL, SHALL NOT, SHOULD, SHOULD NOT,"
+          echo "   RECOMMENDED, NOT RECOMMENDED, MAY, OPTIONAL"
+          exit 1
+        else
+          echo ""
+          echo "✅ SUCCESS: All RFC 2119 keywords are properly capitalized"
+        fi
+
+    - name: Comment on PR (if violations found)
+      if: failure() && github.event_name == 'pull_request'
+      uses: actions/github-script@v7
+      with:
+        script: |
+          github.rest.issues.createComment({
+            issue_number: context.issue.number,
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            body: `## ❌ RFC 2119 Keywords Check Failed
+            
+            This PR contains RFC 2119 keywords that are not properly capitalized. 
+            
+            According to [RFC 2119](https://tools.ietf.org/html/rfc2119), the following keywords must be capitalized when used in normative contexts:
+            
+            - **MUST**, **MUST NOT**, **REQUIRED**
+            - **SHALL**, **SHALL NOT** 
+            - **SHOULD**, **SHOULD NOT**
+            - **RECOMMENDED**, **NOT RECOMMENDED**
+            - **MAY**, **OPTIONAL**
+            
+            Please check the workflow logs for specific files and line numbers that need to be corrected.
+            
+            💡 **Tip**: These keywords should only be capitalized when used in their normative RFC 2119 sense, not in casual usage.
+            
+            ℹ️ **Note**: Keywords within code blocks (\`\`\`) and inline code (\`keyword\`) are automatically ignored by this check.`
+          });
