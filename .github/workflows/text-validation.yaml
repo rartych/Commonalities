@@ -39,12 +39,6 @@ jobs:
       with:
         python-version: '3.x'
 
-
-    - name: Run text validation
-      if: steps.changed-files.outputs.any_changed == 'true'
-      run: |
-        python validate_text.py ${{ steps.changed-files.outputs.all_changed_files }}
-
     - name: Create validation script
       if: steps.changed-files.outputs.any_changed == 'true'
       run: |
@@ -253,6 +247,11 @@ jobs:
             main()
         EOF
 
+    - name: Run text validation
+      if: steps.changed-files.outputs.any_changed == 'true'
+      run: |
+        python validate_text.py ${{ steps.changed-files.outputs.all_changed_files }}
+        
     - name: Comment on PR (if issues found)
       if: failure() && github.event_name == 'pull_request'
       uses: actions/github-script@v7
