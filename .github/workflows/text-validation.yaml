@@ -76,9 +76,6 @@ jobs:
                 return None
 
         REQUIRED_CAPITALIZATIONS = {
-            'github': 'GitHub',
-            'api': 'API',
-            'apis': 'APIs',
             'must': 'MUST',
             'must not': 'MUST NOT',
             'should': 'SHOULD',
@@ -93,6 +90,12 @@ jobs:
             # ... add others as needed
         }
 
+        REQUIRED_NAMES = {
+            'github': 'GitHub',
+            'api': 'API',
+            'apis': 'APIs',
+            # ... add others as needed
+        }
         VALIDATION_RULES = [
             {
                 'name': 'No trailing whitespace',
@@ -102,7 +105,7 @@ jobs:
             {
                 'name': 'No multiple consecutive spaces',
                 'pattern': r'[^\s]  +[^\s]',
-                'message': 'Multiple consecutive spaces found (should be a single space?)'
+                'message': 'multiple consecutive spaces found (should be a single space?)'
             },
             # ... add others as needed
         ]
@@ -128,7 +131,8 @@ jobs:
             text = '\n'.join(lines)
             
             # Sort by length descending: [('must not', 'MUST NOT'), ('must', 'MUST'), ...]
-            patterns = sorted(REQUIRED_CAPITALIZATIONS.items(), key=lambda kv: -len(kv[0]))
+            combined_dict = {**REQUIRED_CAPITALIZATIONS, **REQUIRED_NAMES}
+            patterns = sorted(combined_dict.items(), key=lambda kv: -len(kv[0]))
             matched_spans = []
             
             for incorrect, correct in patterns:
@@ -148,6 +152,10 @@ jobs:
                         continue
                     if filename.endswith(('.md', '.mdx')) and is_in_code_context(text, match.start()):
                         continue
+                    if incorrect in REQUIRED_CAPITALIZATIONS.keys():  
+                        issue_message = f'verify whether "{matched_text}" should be written as "{correct}" to be interpreted as described in RFC 2119'
+                    else:
+                        issue_message = f'check whether "{matched_text}" should be written as "{correct}"'
                     issues.append({
                         'file': filename,
                         'line': line_num,
