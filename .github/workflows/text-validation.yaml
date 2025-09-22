@@ -100,7 +100,7 @@ jobs:
             {
                 'name': 'No trailing whitespace',
                 'pattern': r'[ \t]+$',
-                'message': 'Line has trailing whitespace'
+                'message': 'line contains trailing whitespace(s)'
             },
             {
                 'name': 'No multiple consecutive spaces',
