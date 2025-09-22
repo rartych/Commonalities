@@ -99,6 +99,11 @@ jobs:
                 'pattern': r'[ \t]+$',
                 'message': 'Line has trailing whitespace'
             },
+            {
+                'name': 'No multiple consecutive spaces',
+                'pattern': r'[^\s]  +[^\s]',
+                'message': 'Multiple consecutive spaces found (should be a single space?)'
+            },
             # ... add others as needed
         ]
 
