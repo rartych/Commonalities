@@ -1,7 +1,7 @@
 # CAMARA API Design Guide
 
 
-This document outlines guidelines for API design within the CAMARA project, applicable to all APIs developed under the initiative. 
+This document outlines guidelines for API design within the CAMARA project, applicable to all APIs developed under the initiative.
 
 <!-- TOC tocDepth:2..3 chapterDepth:2..3 -->
 
@@ -1283,6 +1283,7 @@ This approach simplifies API usage for API consumers using a three-legged access
 
 - If the subject can be identified from the access token and the optional [`device` object | `phoneNumber` field](*) is also included in the request, then the server will return an error with the `422 UNNECESSARY_IDENTIFIER` error code. This will be the case even if the same [ device | phone number ](*) is identified by these two methods, as the server is unable to make this comparison.
 ```
+
 
 
 
