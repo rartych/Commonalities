@@ -254,7 +254,7 @@ jobs:
         python validate_text.py ${{ steps.changed-files.outputs.all_changed_files }} | tee text_validation_output.txt
 
     - name: Comment on PR (if issues found)
-      if: failure() && github.event_name == 'pull_request'
+      if: github.event_name == 'pull_request'
       uses: actions/github-script@v7
       with:
         script: |
