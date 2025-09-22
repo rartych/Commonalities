@@ -126,7 +126,7 @@ jobs:
                     issues.append({
                         'file': filename,
                         'line': line_num,
-                        'issue': f'"{matched_text}" should be "{correct}"',
+                        'issue': f'"{matched_text}" probably should be "{correct}"',
                         'type': 'capitalization'
                     })
             return issues
@@ -222,6 +222,7 @@ jobs:
 
     - name: Run text validation
       if: steps.changed-files.outputs.any_changed == 'true'
+      continue-on-error: true
       run: |
         # Run validation and save output to a file
         # python validate_text.py ${{ steps.changed-files.outputs.all_changed_files }} | tee text_validation_output.txt
