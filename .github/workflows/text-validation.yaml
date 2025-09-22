@@ -225,6 +225,7 @@ jobs:
       run: |
         # Run validation and save output to a file
         # python validate_text.py ${{ steps.changed-files.outputs.all_changed_files }} | tee text_validation_output.txt
+        set -o pipefail  # Make pipe return exit code of first failing command
         if python validate_text.py ${{ steps.changed-files.outputs.all_changed_files }} | tee text_validation_output.txt; then
           echo "✅ Text validation passed"
         else
