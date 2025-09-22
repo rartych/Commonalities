@@ -146,7 +146,7 @@ jobs:
                     issues.append({
                         'file': filename,
                         'line': line_num,
-                        'issue': f'"{matched_text}" should be "{correct}"',
+                        'issue': f'check weather "{matched_text}" should be "{correct}"',
                         'type': 'capitalization'
                     })
                     matched_spans.append((start, end))  # Mark this region as matched
@@ -226,7 +226,7 @@ jobs:
                         files_with_issues[filename] = []
                     files_with_issues[filename].append(issue)
                 for filename, issues in files_with_issues.items():
-                    print(f"### {filename}")
+                    print(f"in **{filename}**")
                     for issue in issues:
                         icon = "🔤" if issue['type'] == 'capitalization' else "📝" if issue['type'] == 'formatting' else "❌"
                         print(f"- Line {issue['line']}: {icon} {issue['issue']}")
