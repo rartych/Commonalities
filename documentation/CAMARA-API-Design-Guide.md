@@ -51,7 +51,7 @@ CAMARA uses the OpenAPI Specification (OAS) to describe its APIs. The following 
 
 ### 1.1. Conventions
 The keywords "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be interpreted as described in RFC 2119.
-It must not be corrected now.
+It must  be corrected now.
 
 ### 1.2. Common Vocabulary and Acronyms
 
@@ -1283,6 +1283,7 @@ This approach simplifies API usage for API consumers using a three-legged access
 
 - If the subject can be identified from the access token and the optional [`device` object | `phoneNumber` field](*) is also included in the request, then the server will return an error with the `422 UNNECESSARY_IDENTIFIER` error code. This will be the case even if the same [ device | phone number ](*) is identified by these two methods, as the server is unable to make this comparison.
 ```
+
 
 
 
