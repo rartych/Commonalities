@@ -7,8 +7,7 @@ on:
   pull_request:
     types: [opened, synchronize, reopened]
     paths:
-      - 'documentation/CAMARA-API-Event-Subscription-and-Notification-Guide.md'
-      - 'documentation/CAMARA-API-Design-Guide.md'
+      - 'documentation/**'
 
 jobs:
   text-validation:
@@ -35,7 +34,7 @@ jobs:
 
     - name: Setup Python
       if: steps.changed-files.outputs.any_changed == 'true'
-      uses: actions/setup-python@v4
+      uses: actions/setup-python@v6
       with:
         python-version: '3.x'
 
@@ -198,7 +197,7 @@ jobs:
                     issues = validate_file(filepath)
                     all_issues.extend(issues)
             if all_issues:
-                print("## Text Validation Issues Found\n")
+                print("### Text Validation Issues Found\n")
                 files_with_issues = {}
                 for issue in all_issues:
                     filename = issue['file']
@@ -225,7 +224,13 @@ jobs:
       if: steps.changed-files.outputs.any_changed == 'true'
       run: |
         # Run validation and save output to a file
-        python validate_text.py ${{ steps.changed-files.outputs.all_changed_files }} | tee text_validation_output.txt
+        # python validate_text.py ${{ steps.changed-files.outputs.all_changed_files }} | tee text_validation_output.txt
+        if python validate_text.py ${{ steps.changed-files.outputs.all_changed_files }} | tee text_validation_output.txt; then
+          echo "✅ Text validation passed"
+        else
+          echo "❌ Text validation failed"
+          exit 1
+        fi
 
     - name: Comment on PR (if issues found)
       if: github.event_name == 'pull_request'
