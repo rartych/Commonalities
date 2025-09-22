@@ -159,7 +159,7 @@ jobs:
                     issues.append({
                         'file': filename,
                         'line': line_num,
-                        'issue': f'verify wether "{matched_text}" should be "{correct}" to be interpreted as described in RFC 2119',
+                        'issue': issue_message,
                         'type': 'capitalization'
                     })
                     matched_spans.append((start, end))  # Mark this region as matched
