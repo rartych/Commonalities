@@ -80,6 +80,16 @@ jobs:
             'api': 'API',
             'apis': 'APIs',
             'must': 'MUST',
+            'must not': 'MUST NOT',
+            'should': 'SHOULD',
+            'should not': 'SHOULD NOT',
+            'may': 'MAY',
+            'required': 'REQUIRED',
+            'recommended': 'RECOMMENDED',
+            'not recommended': 'NOT RECOMMENDED',
+            'optional': 'OPTIONAL',
+            'shall': 'SHALL',
+            'shall not': 'SHALL NOT'
             # ... add others as needed
         }
 
