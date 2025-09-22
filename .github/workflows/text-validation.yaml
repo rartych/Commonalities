@@ -80,7 +80,7 @@ jobs:
             'github': 'GitHub',
             'api': 'API',
             'apis': 'APIs',
-            'json': 'JSON',
+            'must': 'MUST',
             # ... add others as needed
         }
 
@@ -247,9 +247,7 @@ jobs:
           <details>
           <summary>Full validation output</summary>
 
-          \`\`\`
           ${details}
-          \`\`\`
 
           </details>
 
