@@ -121,11 +121,21 @@ jobs:
         def check_capitalization(lines, filename, changed_lines):
             issues = []
             text = '\n'.join(lines)
-            for incorrect, correct in REQUIRED_CAPITALIZATIONS.items():
+            
+            # Sort by length descending: [('must not', 'MUST NOT'), ('must', 'MUST'), ...]
+            patterns = sorted(REQUIRED_CAPITALIZATIONS.items(), key=lambda kv: -len(kv[0]))
+            matched_spans = []
+            
+            for incorrect, correct in patterns:
                 pattern = r'\b' + re.escape(incorrect) + r'\b'
-                matches = re.finditer(pattern, text, re.IGNORECASE)
-                for match in matches:
+                for match in re.finditer(pattern, text, re.IGNORECASE):
                     matched_text = match.group()
+                    start, end = match.start(), match.end()
+                    
+                    # Check for overlapping spans
+                    if any((start < m_end and end > m_start) for m_start, m_end in matched_spans):
+                        continue  # Already matched by a longer phrase
+                    
                     if matched_text == correct:
                         continue
                     line_num = text[:match.start()].count('\n') + 1
@@ -136,9 +146,10 @@ jobs:
                     issues.append({
                         'file': filename,
                         'line': line_num,
-                        'issue': f'"{matched_text}" probably should be "{correct}"',
+                        'issue': f'"{matched_text}" should be "{correct}"',
                         'type': 'capitalization'
                     })
+                    matched_spans.append((start, end))  # Mark this region as matched
             return issues
 
         def check_validation_rules(lines, filename, changed_lines):
