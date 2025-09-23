@@ -40,7 +40,7 @@ jobs:
         python-version: '3.x'
 
     - name: Create validation script
-      if: steps.changed-files.outputs.any_changed == 'true'
+      if: github.event_name == 'workflow_dispatch' || steps.changed-files.outputs.any_changed == 'true'
       run: |
         cat > validate_text.py << 'EOF'
         #!/usr/bin/env python3
