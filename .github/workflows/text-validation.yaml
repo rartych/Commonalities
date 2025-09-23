@@ -8,6 +8,7 @@ on:
     types: [opened, synchronize, reopened]
     paths:
       - 'documentation/**'
+  workflow_dispatch:
 
 jobs:
   text-validation:
@@ -200,7 +201,7 @@ jobs:
                         })
             return issues
 
-        def validate_file(filepath):
+        def validate_file(filepath, all_lines=False):
             try:
                 with open(filepath, 'r', encoding='utf-8') as f:
                     lines = f.read().splitlines()
@@ -213,22 +214,33 @@ jobs:
                     'issue': f'Error reading file: {e}',
                     'type': 'error'
                 }]
-            changed_lines = get_pr_diff_lines(filepath)
-            if changed_lines is None or not changed_lines:
-                return []
+
+            if all_lines:
+                changed_lines = set(range(1, len(lines) + 1))
+            else:
+                changed_lines = get_pr_diff_lines(filepath)
+                if changed_lines is None or not changed_lines:
+                    return []
             issues = []
             issues.extend(check_capitalization(lines, str(filepath), changed_lines))
             issues.extend(check_validation_rules(lines, str(filepath), changed_lines))
             return issues
 
         def main():
-            if len(sys.argv) < 2:
-                print("Usage: python validate_text.py <file1> <file2> ...")
+            all_lines = False
+            files = []
+            for arg in sys.argv[1:]:
+                if arg == "--full":
+                    all_lines = True
+                else:
+                    files.append(arg)
+            if not files:
+                print("Usage: python validate_text.py <file1> <file2> ... [--full]")
                 sys.exit(1)
             all_issues = []
-            for filepath in sys.argv[1:]:
+            for filepath in files:
                 if os.path.isfile(filepath):
-                    issues = validate_file(filepath)
+                    issues = validate_file(filepath, all_lines=all_lines)
                     all_issues.extend(issues)
             if all_issues:
                 print("### Text Validation Issues Found\n")
@@ -302,82 +314,7 @@ jobs:
             body: comment
           });
   
-  # Optional: Auto-fix some common issues
-  # The following auto-fix job is commented out to avoid duplication and accidental execution.
-  # If you want to enable auto-fix later, simply uncomment the lines below.
-
-  # auto-fix:
-  #   runs-on: ubuntu-latest
-  #   name: Auto-fix Text Issues
-  #   if: github.event_name == 'pull_request'
-  #   needs: text-validation
-  #   # Only run if text-validation failed and this is enabled
-  #   # Remove the 'if: false' line below to enable auto-fixing
-  #   if: false
-  #   
-  #   steps:
-  #   - name: Checkout code
-  #     uses: actions/checkout@v4
-  #     with:
-  #       token: ${{ secrets.GITHUB_TOKEN }}
-  #       fetch-depth: 0
-  #
-  #   - name: Get changed files
-  #     id: changed-files
-  #     uses: tj-actions/changed-files@v40
-  #     with:
-  #       files: |
-  #         **/*.md
-  #         **/*.txt
-  #         **/*.rst
-  #         **/*.mdx
-  #         docs/**
-  #         README*
-  #
-  #   - name: Auto-fix common issues
-  #     if: steps.changed-files.outputs.any_changed == 'true'
-  #     run: |
-  #       # Create a simple auto-fix script
-  #       cat > auto_fix.py << 'EOF'
-  #       import re
-  #       import sys
-  #       
-  #       # Simple fixes that are safe to automate
-  #       SAFE_FIXES = {
-  #           r'\bgithub\b': 'GitHub',
-  #           r'\bjavascript\b': 'JavaScript',
-  #           r'\btypescript\b': 'TypeScript',
-  #           r'\bapi\b': 'API',
-  #           r'\bapis\b': 'APIs',
-  #           r'\bjson\b': 'JSON',
-  #           r' +$': '',  # Remove trailing whitespace
-  #       }
-  #       
-  #       for filepath in sys.argv[1:]:
-  #           try:
-  #               with open(filepath, 'r') as f:
-  #                   content = f.read()
-  #               
-  #               original_content = content
-  #               for pattern, replacement in SAFE_FIXES.items():
-  #                   content = re.sub(pattern, replacement, content, flags=re.IGNORECASE if pattern != r' +$' else 0)
-  #               
-  #               if content != original_content:
-  #                   with open(filepath, 'w') as f:
-  #                       f.write(content)
-  #                   print(f"Fixed issues in {filepath}")
-  #           except Exception as e:
-  #               print(f"Error processing {filepath}: {e}")
-  #       EOF
-  #       
-  #       python auto_fix.py ${{ steps.changed-files.outputs.all_changed_files }}
-  #
-  #   - name: Commit auto-fixes
-  #     run: |
-  #       git config --local user.email "action@github.com"
-  #       git config --local user.name "GitHub Action"
-  #       git add .
-  #       if ! git diff --cached --quiet; then
-  #         git commit -m "Auto-fix text formatting issues"
-  #         git push
-  #       fi
+    - name: Full Text Validation
+      if: github.event_name == 'workflow_dispatch'
+      run: |
+        python validate_text.py documentation/CAMARA-API-Event-Subscription-and-Notification-Guide.md documentation/CAMARA-API-Design-Guide.md --full
