@@ -88,13 +88,14 @@ jobs:
             'optional': 'OPTIONAL',
             'shall': 'SHALL',
             'shall not': 'SHALL NOT'
-            # ... add others as needed
         }
 
         REQUIRED_NAMES = {
             'github': 'GitHub',
             'api': 'API',
             'apis': 'APIs',
+            'Camara': 'CAMARA',
+            'Cloudevents': 'CloudEvents',
             # ... add others as needed
         }
         VALIDATION_RULES = [
