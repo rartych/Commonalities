@@ -252,7 +252,9 @@ jobs:
                     files_with_issues[filename].append(issue)
                 for filename, issues in files_with_issues.items():
                     print(f"in **{filename}**")
-                    for issue in issues:
+                    # Sort the issues by the 'line' field
+                    sorted_issues = sorted(issues, key=lambda issue: issue['line'])
+                    for issue in sorted_issues:
                         icon = "🔤" if issue['type'] == 'capitalization' else "📝" if issue['type'] == 'formatting' else "❌"
                         print(f"- Line {issue['line']}: {icon} {issue['issue']}")
                     print()
