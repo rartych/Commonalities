@@ -20,12 +20,6 @@ jobs:
       issues: write         # Required for issue/PR comments
       
     steps:
-    - name: Check permissions
-      env:
-        GH_TOKEN: ${{ github.token }}
-      run: |
-        gh api user/permissions
-        
     - name: Checkout code
       uses: actions/checkout@v4
       with:
