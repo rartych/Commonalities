@@ -21,6 +21,8 @@ jobs:
       
     steps:
     - name: Check permissions
+      env:
+        GH_TOKEN: ${{ github.token }}
       run: |
         gh api user/permissions
         
