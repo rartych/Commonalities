@@ -32,8 +32,6 @@ jobs:
       uses: tj-actions/changed-files@v40
       continue-on-error: true
       with:
-        base_sha: ${{ github.event.pull_request.base.sha }}
-        head_sha: ${{ github.event.pull_request.head.sha }}
         files: |
           documentation/CAMARA-API-Event-Subscription-and-Notification-Guide.md
           documentation/CAMARA-API-Design-Guide.md
