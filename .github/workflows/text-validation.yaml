@@ -20,6 +20,10 @@ jobs:
       issues: write         # Required for issue/PR comments
       
     steps:
+    - name: Check permissions
+      run: |
+        gh api user/permissions
+        
     - name: Checkout code
       uses: actions/checkout@v4
       with:
