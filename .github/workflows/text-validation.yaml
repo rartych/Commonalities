@@ -20,7 +20,7 @@ jobs:
       issues: write         # Required for issue/PR comments      
     steps:
     - name: Checkout code
-      uses: actions/checkout@v4
+      uses: actions/checkout@v5
       with:
         repository: ${{ github.event.pull_request.head.repo.full_name }}
         ref: ${{ github.event.pull_request.head.ref }}
@@ -35,7 +35,7 @@ jobs:
         
     - name: Get changed files
       id: changed-files
-      uses: tj-actions/changed-files@v40
+      uses: tj-actions/changed-files@v47
       continue-on-error: true
       with:
         files: |
@@ -115,9 +115,7 @@ jobs:
             },
             {
                 'name': 'No multiple consecutive spaces',
-                'pattern': r'[^
-\s]  +[^
-\s]',
+                'pattern': r'[^\s]  +[^\s]',
                 'message': 'multiple consecutive spaces found (should be a single space?)'
             },
             # ... add others as needed
