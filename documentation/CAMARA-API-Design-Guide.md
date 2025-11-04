@@ -318,8 +318,8 @@ In the following, we elaborate on the existing client errors. In particular, we 
 
 **Mandatory Errors** to be **documented in CAMARA API Spec YAML** are the following:
 
-- For event subscriptions APIs, the ones defined in Event Subscription section of [CAMARA API Event Subscription and Notification Guide](/documentation/CAMARA-API-Event-Subscription-and-Notification.md)
-- For event notifications flow, the ones defined in Event Notification section of [CAMARA API Event Subscription and Notification Guide](/documentation/CAMARA-API-Event-Subscription-and-Notification.md)
+- For event subscriptions APIs, the ones defined in Event Subscription section of [CAMARA API Event Subscription and Notification Guide](/documentation/CAMARA-API-Event-Subscription-and-Notification-Guide.md)
+- For event notifications flow, the ones defined in Event Notification section of [CAMARA API Event Subscription and Notification Guide](/documentation/CAMARA-API-Event-Subscription-and-Notification-Guide.md)
 - For the rest of APIs:
   - Error status 401
   - Error status 403
@@ -937,10 +937,6 @@ In the API response, provide relevant error message.
 
 Usernames, passwords, session tokens, and API keys SHOULD NOT appear in the URL, as this can be captured in web server logs, making them easily exploitable.
 See section [6.5. POST or GET for transferring sensitive or complex data](#65-post-or-get-for-transferring-sensitive-or-complex-data).
-
-5. **Hashing passwords**.
-
-   Passwords SHOULD never be transmitted in API bodies; however, if it becomes absolutely necessary, they MUST be hashed to protect the system and minimize potential damage in the event of a compromise. Utilizing strong hashing algorithms is crucial for password security. Effective options include Argon2, PBKDF2, bcrypt, and scrypt, which are designed to securely hash passwords and withstand various attack vectors.
 
 For further guidance, please refer to the [OWASP API Security Project](https://owasp.org/www-project-api-security/). This resource offers comprehensive insights and best practices for securing APIs against common vulnerabilities and threats.
 
