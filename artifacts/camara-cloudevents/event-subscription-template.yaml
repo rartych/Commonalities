@@ -14,14 +14,14 @@ info:
     url: https://www.apache.org/licenses/LICENSE-2.0.html
   version: wip
   x-camara-commonalities: "0.6"
-  
+
 externalDocs:
   description: Product documentation at CAMARA
-  url: https://github.com/camaraproject/{apiRepository}
+  url: https://github.com/camaraproject/apiRepository
   # {apiRepository} MUST be replaced by the CAMARA Subproject Repository name where the API design based on this template is hosted.
 servers:
   - url: "{apiRoot}/api-name/vx.y"
-  # api-name and version should be valued accordingly to the CAMARA API versioning guidelines, e.g. for a version x.y.z, put v0.y for x=0 or just vx for x>0 in the url.
+    # api-name and version should be valued accordingly to the CAMARA API versioning guidelines, e.g. for a version x.y.z, put v0.y for x=0 or just vx for x>0 in the url.
     variables:
       apiRoot:
         default: http://localhost:9091
@@ -352,7 +352,7 @@ components:
             - ACCESSTOKEN
             - REFRESHTOKEN
           description: |
-            The type of the credential. 
+            The type of the credential.
             Note: Type of the credential - MUST be set to ACCESSTOKEN for now
       discriminator:
         propertyName: credentialType
@@ -924,7 +924,7 @@ components:
                 code: INVALID_PROTOCOL
                 message: Only HTTP is supported
             GENERIC_400_INVALID_CREDENTIAL:
-              description: Invalid sink credential type 
+              description: Invalid sink credential type
               value:
                 status: 400
                 code: INVALID_CREDENTIAL
@@ -1046,7 +1046,7 @@ components:
               value:
                 status: 403
                 code: PERMISSION_DENIED
-                message: Client does not have sufficient permissions to perform this action.       
+                message: Client does not have sufficient permissions to perform this action.   
     SubscriptionPermissionDenied403:
       description: Client does not have sufficient permission
       headers:
