@@ -510,7 +510,8 @@ components:
               value:
                 status: 409
                 code: INCOMPATIBLE_STATE
-                message: A referenced resource is in an incompatible state.             
+                message: A referenced resource is in an incompatible state.          
+
             GENERIC_409_{{SPECIFIC_CODE}}:
               description: Specific conflict situation that is relevant in the context of the API
               value:
