@@ -37,8 +37,8 @@ Feature: CAMARA Common Artifact C02 - Test scenarios for phoneNumber errors
     And the response property "$.code" is "INVALID_ARGUMENT"
     And the response property "$.message" contains a user friendly text
 
-    @{feature_identifier}_C02.02_phone_number_not_found
-    Scenario: Phone number not found
+  @{feature_identifier}_C02.02_phone_number_not_found
+  Scenario: Phone number not found
     Given the header "Authorization" is set to a valid access token which does not identify a single phone number
     And the request body property "{path_to_phoneNumber}" is compliant with the schema but does not identify a valid phone number
     When the request "{operationId}" is sent
@@ -77,3 +77,4 @@ Feature: CAMARA Common Artifact C02 - Test scenarios for phoneNumber errors
     And the response property "$.status" is 422
     And the response property "$.code" is "SERVICE_NOT_APPLICABLE"
     And the response property "$.message" contains a user friendly text
+
