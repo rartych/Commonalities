@@ -106,5 +106,3 @@ Feature: CAMARA Common Artifact C01 - Test scenarios for device errors
     And the response property "$.status" is 422
     And the response property "$.code" is "SERVICE_NOT_APPLICABLE"
     And the response property "$.message" contains a user-friendly text
-
-
