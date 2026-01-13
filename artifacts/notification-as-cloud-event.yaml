@@ -14,13 +14,13 @@ info:
     # Relevant terms and definitions
 
       * **Occurrence** : An "occurrence" is the capture of a statement of fact during the operation of a software system.
-  
+
       * **Event**: An "event" is a data record expressing an occurrence and its context. Events are routed from an
     event producer (the source) to interested event consumers.
 
       * **Producer**: The "producer" is a specific instance, process or device that creates the data structure
     describing the CloudEvent.
-  
+
       * **Source**:  The "source" is the context in which the occurrence happened. In a distributed system it might
     consist of multiple producers. If a source is not aware of CloudEvents, an external producer creates
     the CloudEvent on behalf of the source.
@@ -32,7 +32,7 @@ info:
     include information about the occurrence, details about the data that was changed, or more.
 
     # API Functionality
-  
+
     Only one endpoint/operation is provided: `POST /your_webhook_notification_url`
     This endpoint describes the event notification received on subscription listener side when the event occurred.
     A detailed description of the event notification is provided in the [CAMARA API Event Subscription and Notification Guide](https://github.com/camaraproject/Commonalities/blob/main/documentation/CAMARA-API-Event-Subscription-and-Notification-Guide.md#3-event-notification)
@@ -125,7 +125,7 @@ components:
         message:
           type: string
           description: A human-readable description of what the event represents
-       
+
     XCorrelator:
       type: string
       pattern: ^[a-zA-Z0-9-_:;.\/<>{}]{0,256}$
