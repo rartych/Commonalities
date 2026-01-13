@@ -14,7 +14,7 @@ info:
     # Relevant terms and definitions
 
       * **Occurrence** : An "occurrence" is the capture of a statement of fact during the operation of a software system.
-
+  
       * **Event**: An "event" is a data record expressing an occurrence and its context. Events are routed from an
     event producer (the source) to interested event consumers.
 
