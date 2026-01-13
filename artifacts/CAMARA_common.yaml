@@ -5,9 +5,9 @@ info:
   license:
     name: Apache 2.0
     url: https://www.apache.org/licenses/LICENSE-2.0.html
-  version:  wip
+  version: wip
   x-camara-commonalities: "0.6"
-  
+
 paths: {}
 components:
   securitySchemes:
@@ -76,7 +76,7 @@ components:
         networkAccessIdentifier:
           $ref: "#/components/schemas/NetworkAccessIdentifier"
         ipv4Address:
-          $ref: "#/components/schemas/DeviceIpv4Address"
+          $ref: "#/components/schemas/DeviceIpv4Addr"
         ipv6Address:
           $ref: "#/components/schemas/DeviceIpv6Address"
       minProperties: 1
@@ -102,7 +102,7 @@ components:
       type: string
       example: "123456789@example.com"
 
-    DeviceIpv4Address:
+    DeviceIpv4Addr:
       type: object
       description: |
         The device should be identified by either the public (observed) IP address and port as seen by the application server, or the private (local) and any public (observed) IP addresses in use by the device (this information can be obtained by various means, for example from some DNS servers).
@@ -114,9 +114,9 @@ components:
         In all cases, publicAddress must be specified, along with at least one of either privateAddress or publicPort, dependent upon which is known. In general, mobile devices cannot be identified by their public IPv4 address alone.
       properties:
         publicAddress:
-          $ref: "#/components/schemas/SingleIpv4Address"
+          $ref: "#/components/schemas/SingleIpv4Addr"
         privateAddress:
-          $ref: "#/components/schemas/SingleIpv4Address"
+          $ref: "#/components/schemas/SingleIpv4Addr"
         publicPort:
           $ref: "#/components/schemas/Port"
       anyOf:
@@ -126,7 +126,7 @@ components:
         publicAddress: "84.125.93.10"
         publicPort: 59765
 
-    SingleIpv4Address:
+    SingleIpv4Addr:
       description: A single IPv4 address with no subnet mask
       type: string
       format: ipv4
@@ -234,44 +234,44 @@ components:
       maximum: 180
 
   responses:
-#######################################################
-#######################################################
-# ERROR RESPONSE SCHEMA TEMPLATE
-#   - Objective: Make normative error `status` and `code` values
-#   - Schema Template rationale:
-#     - The `allOf` in content.application/json.schema allows a combination of both the generic ErrorInfo schema and the specific schema for this error response,
-#       which validates that `status` and `code` have only the specified values.
-#       This `allOf` is used without discriminator because it does not imply any hierarchy between the models, just 2 schemas that must be independently validated.
-#######################################################
-#    ErrorResponseSchema:
-#      ...
-#      content:
-#        application/json:
-#          schema:
-#            allOf:
-#              - $ref: '#/components/schemas/ErrorInfo'
-#              - type: object
-#                properties:
-#                  status:
-#                    enum:
-#                      - <status>
-#                  code:
-#                    enum:
-#                      - <code1>
-#                      - <code2>
-#          examples:
-#            ExampleKey1:
-#              value:
-#                status: <status>
-#                code: <code1>
-#                message: <message1>
-#            ExampleKey2:
-#              value:
-#                status: <status>
-#                code: <code2>
-#                message: <message2>
-#######################################################
-#######################################################
+    #######################################################
+    #######################################################
+    # ERROR RESPONSE SCHEMA TEMPLATE
+    #   - Objective: Make normative error `status` and `code` values
+    #   - Schema Template rationale:
+    #     - The `allOf` in content.application/json.schema allows a combination of both the generic ErrorInfo schema and the specific schema for this error response,
+    #       which validates that `status` and `code` have only the specified values.
+    #       This `allOf` is used without discriminator because it does not imply any hierarchy between the models, just 2 schemas that must be independently validated.
+    #######################################################
+    #    ErrorResponseSchema:
+    #      ...
+    #      content:
+    #        application/json:
+    #          schema:
+    #            allOf:
+    #              - $ref: '#/components/schemas/ErrorInfo'
+    #              - type: object
+    #                properties:
+    #                  status:
+    #                    enum:
+    #                      - <status>
+    #                  code:
+    #                    enum:
+    #                      - <code1>
+    #                      - <code2>
+    #          examples:
+    #            ExampleKey1:
+    #              value:
+    #                status: <status>
+    #                code: <code1>
+    #                message: <message1>
+    #            ExampleKey2:
+    #              value:
+    #                status: <status>
+    #                code: <code2>
+    #                message: <message2>
+    #######################################################
+    #######################################################
     Generic400:
       description: Bad Request
       headers:
@@ -510,7 +510,7 @@ components:
               value:
                 status: 409
                 code: INCOMPATIBLE_STATE
-                message: A referenced resource is in an incompatible state.                
+                message: A referenced resource is in an incompatible state.             
             GENERIC_409_{{SPECIFIC_CODE}}:
               description: Specific conflict situation that is relevant in the context of the API
               value:
@@ -802,6 +802,3 @@ components:
                 status: 504
                 code: TIMEOUT
                 message: Request timeout exceeded.
-
-
-
