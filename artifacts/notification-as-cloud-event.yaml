@@ -7,34 +7,34 @@ info:
     # Introduction
 
     A lot of CAMARA APIs offer the capability to API consumer to receive events.
-    Event data are defined in each API definition but in order to provide consistency across CAMARA APIs and to increase 
-    interoperability we will use [cloudevents](https://cloudevents.io/) specifications. In particular, every CAMARA Event will 
+    Event data are defined in each API definition but in order to provide consistency across CAMARA APIs and to increase
+    interoperability we will use [cloudevents](https://cloudevents.io/) specifications. In particular, every CAMARA Event will
     be defined using [cloudevents-json-format](https://github.com/cloudevents/spec/blob/main/cloudevents/formats/json-format.md)
-   
+
     # Relevant terms and definitions
 
       * **Occurrence** : An "occurrence" is the capture of a statement of fact during the operation of a software system.
-  
-      * **Event**: An "event" is a data record expressing an occurrence and its context. Events are routed from an 
+
+      * **Event**: An "event" is a data record expressing an occurrence and its context. Events are routed from an
     event producer (the source) to interested event consumers.
-    
-      * **Producer**: The "producer" is a specific instance, process or device that creates the data structure 
+
+      * **Producer**: The "producer" is a specific instance, process or device that creates the data structure
     describing the CloudEvent.
-  
-      * **Source**:  The "source" is the context in which the occurrence happened. In a distributed system it might 
-    consist of multiple producers. If a source is not aware of CloudEvents, an external producer creates 
+
+      * **Source**:  The "source" is the context in which the occurrence happened. In a distributed system it might
+    consist of multiple producers. If a source is not aware of CloudEvents, an external producer creates
     the CloudEvent on behalf of the source.
-  
-      * **Consumer**: A "consumer" receives the event and acts upon it. It uses the context and data to execute some 
+
+      * **Consumer**: A "consumer" receives the event and acts upon it. It uses the context and data to execute some
     logic, which might lead to the occurrence of new events.
-  
-      * **Data**:  Domain-specific information about the occurrence (i.e. the payload). This might 
+
+      * **Data**:  Domain-specific information about the occurrence (i.e. the payload). This might
     include information about the occurrence, details about the data that was changed, or more.
-  
+
     # API Functionality
-    
+
     Only one endpoint/operation is provided: `POST /your_webhook_notification_url`
-    This endpoint describes the event notification received on subscription listener side when the event occurred. 
+    This endpoint describes the event notification received on subscription listener side when the event occurred.
     A detailed description of the event notification is provided in the [CAMARA API Event Subscription and Notification Guide](https://github.com/camaraproject/Commonalities/blob/main/documentation/CAMARA-API-Event-Subscription-and-Notification-Guide.md#3-event-notification)
 
   termsOfService: http://swagger.io/terms/
@@ -48,8 +48,8 @@ externalDocs:
   description: Product documentation at CAMARA
   url: https://github.com/camaraproject/Commonalities
 security:
-    - notificationsBearerAuth: []
-    - {}
+  - notificationsBearerAuth: []
+  - {}
 
 servers:
   - url: '{apiRoot}'
@@ -62,14 +62,14 @@ tags:
     description: |
       Events received on subscription listener side.
 paths:
-  /your_webhook_notification_url:
+  /your-webhook-notification-url:
     post:
       tags:
         - CAMARA Cloud Event
       summary: "Cloud Event notification endpoint to notify consumer that statement of fact had occurred"
       description: |
         INFORMATIVE ENDPOINT: The value of this endpoint is freely declared by each client app by means of resource-based
-        subscription or instance-based subscription. /your_webhook_notification_url is 
+        subscription or instance-based subscription. /your_webhook_notification_url is
         just a convention naming referring to an absolute URL, indeed the one indicated by API client
         in the triggering of the procedure (resource-based or instance-based).  In this way, it represents an absolute
         URL, i.e.: notifications won't be sent to /event-notification/vX/your_webhook_notification_url.
@@ -87,20 +87,20 @@ paths:
                 $ref: '#/components/examples/QOS_STATUS_CHANGED_EXAMPLE'
 
       responses:
-        204:
+        "204":
           description: No Content
           headers:
             x-correlator:
               $ref: "#/components/headers/x-correlator"
-        400:
+        "400":
           $ref: "#/components/responses/Generic400"
-        401:
+        "401":
           $ref: "#/components/responses/Generic401"
-        403:
+        "403":
           $ref: "#/components/responses/Generic403"
-        410:
+        "410":
           $ref: "#/components/responses/Generic410"
-        429:
+        "429":
           $ref: "#/components/responses/Generic429"
 components:
   securitySchemes:
@@ -125,7 +125,7 @@ components:
         message:
           type: string
           description: A human-readable description of what the event represents
-          
+
     XCorrelator:
       type: string
       pattern: ^[a-zA-Z0-9-_:;.\/<>{}]{0,256}$
